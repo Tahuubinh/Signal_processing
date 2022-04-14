@@ -1,0 +1,46 @@
+import numpy as np
+from matplotlib import pyplot as plt
+plt.style.use('default')
+from matplotlib.pyplot import figure
+
+fig, ax = plt.subplots(5, 1, figsize=(15,30))
+n = np.arange(-10, 11)
+x_n = np.power(0.8, n) * (n >= 0)
+ax[0].set_xlim([-5,9])
+ax[0].stem(n, x_n)
+ax[0].set_title("x(n)")
+# ax[0].set_xlabel('n')
+# ax[0].set_xticks(n)
+ax[0].stem(n, x_n)
+
+h_n = 1. * (n >= 0)
+ax[1].set_xlim([-5,9])
+ax[1].set_title("h(n)")
+ax[1].stem(n, h_n)
+
+y_n = np.convolve(x_n, h_n, 'same')
+ax[2].set_xlim([-5,9])
+ax[2].set_title("y(n)")
+ax[2].stem(n, y_n)
+
+n = np.arange(0,2*np.pi, 0.01)
+a = 0.8
+amplitude = 1 / np.sqrt(1 + a * a - 2 * a * np.cos(n))
+#ax[3].set_xlim([-5,9])
+ax[3].set_title("Amplitude Response")
+ax[3].set_xlabel("Frequency")
+ax[3].set_ylabel("Amplitude")
+ax[3].plot(n, amplitude)
+ax[3].set_xticks([0, np.pi, 2 * np.pi], ['0', 'π', '2π'])
+
+n = np.arange(0,2*np.pi, 0.01)
+a = 1
+amplitude = np.sqrt(1 + a * a - 2 * a * np.cos(n))
+#ax[3].set_xlim([-5,9])
+ax[4].set_title("Amplitude Response")
+ax[4].set_xlabel("Frequency")
+ax[4].set_ylabel("Amplitude")
+ax[4].plot(n, amplitude)
+ax[4].set_xticks([0, np.pi, 2 * np.pi], ['0', 'π', '2π'])
+
+plt.savefig("Ta_Huu_Binh_20190094.pdf")

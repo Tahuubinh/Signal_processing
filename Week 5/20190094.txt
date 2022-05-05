@@ -1,0 +1,20 @@
+import numpy as np
+from matplotlib import pyplot as plt
+plt.style.use('default')
+
+fig, ax = plt.subplots(2, 1, figsize=(15,15))
+
+F = 300 #Hz
+F_sam = 1500 #Hz
+T_sam = 1 / F_sam
+
+n = np.arange(0, 512)
+t = n * T_sam
+xt = np.sin(2 * np.pi * F * t)
+
+ax[0].set_xlabel("t")
+ax[0].set_ylabel("x(t)")
+ax[0].stem(n, xt)
+ax[1].magnitude_spectrum(xt, Fs = F_sam)
+plt.show()
+plt.savefig("Ta_Huu_Binh_20190094.pdf")

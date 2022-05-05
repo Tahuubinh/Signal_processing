@@ -1,0 +1,27 @@
+from cmath import cos, polar, sin
+import math
+import numpy as np
+import matplotlib.pyplot as plt
+
+def h2(w):
+    return polar(complex(1 - cos(w), sin(w)))[0]
+
+def h1(w):
+    return polar(1 / (1 - 0.8 * complex(cos(w), -sin(w))))[0]
+
+a = np.arange(0, 628)
+
+h1w = []
+h2w = []
+
+
+for i in range(len(a)):
+    h1w.append(h1(a[i] / 100))
+    h2w.append(h2(a[i] / 100))
+
+
+plt.plot(a /100, h1w)
+plt.show()
+
+plt.plot(a /100, h2w)
+plt.show()

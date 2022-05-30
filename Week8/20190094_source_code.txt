@@ -1,0 +1,42 @@
+import numpy as np
+from matplotlib import pyplot as plt
+plt.style.use('default')
+from scipy import signal
+fig, ax = plt.subplots(3, 1, figsize=(15,24))
+
+def calModule(a):
+    return np.sqrt(a.imag**2 + a.real**2)
+
+b = [1, 0, -1]
+a = [1, 0, 0.95**2]
+
+w1, h1 = signal.freqz(b, a)
+
+magnitude1 = calModule(h1)
+
+ax[0].plot(w1, magnitude1, color='g')
+ax[0].set_ylabel("Magnitude")
+ax[0].set_xlabel('Normalized Frequency')
+ax[0].grid(True)
+ax[0].set_title('Use scipy.signal.freqz(b,a)') 
+
+w2 = w1
+magnitude2 = np.sqrt(((np.cos(w2) - 1)**2 + np.sin(w2)**2) * ((np.cos(w2) + 1)**2 + np.sin(w2)**2) / (
+    np.cos(w2)**2 + (np.sin(w2) - 0.95)**2) / (np.cos(w2)**2 + (np.sin(w2) + 0.95)**2))
+ax[1].plot(w2, magnitude2, color='b')
+ax[1].set_ylabel("Magnitude")
+ax[1].set_xlabel('Normalized Frequency')
+ax[1].grid(True)
+ax[1].set_title('Magnitude response based on poles and zeros')
+
+w3 = w1
+h3 = (1 - np.cos(2 * w3) + 1.j * np.sin(2 * w3)) / (1 + (0.95**2) * (np.cos(2 * w3) - 1.j * np.sin(2 * w3)))
+magnitude3 = calModule(h3)
+
+ax[2].plot(w3, magnitude3, color='r')
+ax[2].grid(True)
+ax[2].set_ylabel("Magnitude")
+ax[2].set_xlabel('Normalized Frequency')
+ax[2].set_title('Magnitude response based on $H(e^{jw})$')
+
+plt.savefig("Ta_Huu_Binh_20190094_coding_excercises.pdf")

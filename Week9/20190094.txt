@@ -1,0 +1,71 @@
+from scipy.signal import tf2zpk
+import numpy as np
+from matplotlib import pyplot as plt
+import matplotlib
+plt.style.use('default')
+from scipy import signal
+from scipy.signal import freqz
+# plt.rcParams['figure.figsize'] = [12, 20]
+# plt.rcParams['figure.dpi'] = 100 # 200 e.g. is really fine, but slower
+fig, ax = plt.subplots(5, 1, figsize=(15,30))
+
+def computeMod(a):
+    return np.sqrt(a.imag**2 + a.real**2)
+t = np.linspace(0, 1, 10000)
+x = 4 + np.cos(250 * np.pi * t - np.pi/4) - 3 * np.cos(2000 * np.pi * t / 3)
+ax[0].set_xlim(0, 1.01)
+ax[0].set_ylabel("Amplitude")
+ax[0].set_xlabel('Time in second')
+ax[0].grid(True)
+ax[0].set_title('Input Signal')
+ax[0].plot(t, x, color='b')
+
+t = np.linspace(0, 1, 1000)
+x = 4 + np.cos(250 * np.pi * t - np.pi/4) - 3 * np.cos(2000 * np.pi * t / 3)
+sp = np.fft.fft(x)
+freq = np.fft.fftfreq(t.shape[-1])
+w = freq * 2 * np.pi
+sp_m = computeMod(sp)
+ax[1].set_xlim(0, 3.1)
+ax[1].set_ylabel("Magnitude")
+ax[1].set_xlabel('Frequency in rad/s')
+ax[1].grid(True)
+ax[1].set_title('Magnitude Spectrum of Input Signal')
+ax[1].plot(w, sp_m)
+
+t = np.linspace(0, 1, 1000)
+x = 4 + np.cos(250 * np.pi * t - np.pi/4) - 3 * np.cos(2000 * np.pi * t / 3)
+b = [1, 1, 1]
+a = [3, 0, 0]
+w, h = signal.freqz(b, a)
+magnitude = computeMod(h)
+ax[2].set_ylabel("Magnitude")
+ax[2].set_xlabel('Frequency in rad/s')
+ax[2].grid(True)
+ax[2].set_title('Magnitude Response of Filter')
+ax[2].plot(w, magnitude, color='b')
+
+t = np.linspace(0, 1, 1000)
+x = 4 + np.cos(250 * np.pi * t - np.pi/4) - 3 * np.cos(2000 * np.pi * t / 3)
+y = signal.lfilter(b, a, x)
+ax[3].set_xlim(0, 1.01)
+ax[3].set_ylim(3.1, 5)
+ax[3].set_ylabel("Amplitude")
+ax[3].set_xlabel('Time in second')
+ax[3].grid(True)
+ax[3].set_title('Output Signal')
+ax[3].plot(t, y, color='b')
+
+t = np.linspace(0, 1, 1000)
+sp = np.fft.fft(y)
+freq = np.fft.fftfreq(t.shape[-1])
+w = freq * 2 * np.pi
+sp_m = computeMod(sp)
+ax[4].set_xlim(0, 3.1)
+ax[4].set_ylabel("Magnitude")
+ax[4].set_xlabel('Frequency in rad/s')
+ax[4].grid(True)
+ax[4].set_title('Magnitude Spectrum of Output Signal')
+ax[4].plot(w, sp_m)
+
+plt.savefig("Ta_Huu_Binh_20190094.pdf")
